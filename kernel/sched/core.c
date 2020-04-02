@@ -2392,6 +2392,7 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
 	p->boost                = 0;
 	p->boost_expires        = 0;
 	p->boost_period         = 0;
+	p->low_latency          = 0;
 
 	INIT_LIST_HEAD(&p->se.group_node);
 
