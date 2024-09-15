@@ -24,8 +24,6 @@
 #include <linux/spi/spi.h>
 #include <linux/uaccess.h>
 #include <linux/regulator/consumer.h>
-#include <linux/pm_qos.h>
-#include <linux/spi/spi-geni-qcom.h>
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
 #include <linux/earlysuspend.h>
@@ -120,7 +118,7 @@ extern const uint16_t gesture_key_array[];
 /*2019.12.06 longcheer taocheng add for charger mode begin*/
 /*functions description*/
 //enable tp usb plugin feature
-#define NVT_USB_PLUGIN		0
+#define NVT_USB_PLUGIN		1
 
 #if NVT_USB_PLUGIN
 typedef struct touchscreen_usb_plugin_data {
@@ -153,11 +151,9 @@ struct nvt_ts_data {
 	struct delayed_work nvt_fwu_work;
 	uint16_t addr;
 	int8_t phys[32];
-	struct workqueue_struct *coord_workqueue;
 #if defined(CONFIG_FB)
 	struct workqueue_struct *workqueue;
 	struct work_struct resume_work;
-	struct work_struct irq_work;
 #ifdef _MSM_DRM_NOTIFY_H_
 	struct notifier_block drm_notif;
 #else
@@ -204,8 +200,6 @@ struct nvt_ts_data {
 	struct regulator *pwr_ibb; /* VSN -5V */
 #endif
 
-	struct pm_qos_request pm_spi_req;
-	struct pm_qos_request pm_touch_req;
 /*2019.12.16 longcheer taocheng add (xiaomi game mode) start*/
 #ifdef CONFIG_TOUCHSCREEN_XIAOMI_TOUCHFEATURE
 	u8 palm_sensor_switch;
