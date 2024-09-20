@@ -46,6 +46,9 @@ if [[ $1 = "-c" || $1 = "--clean" ]]; then
 	rm -rf out
 fi
 
+patch -p1 < Cgroup.patch
+bash SGconfig.sh arch/arm64/configs/surya_defconfig -w
+
 echo -e "\nStarting compilation...\n"
 make $DEFCONFIG
 make -j$(nproc --all) LLVM=1 Image.gz dtb.img dtbo.img 2> >(tee log.txt >&2) || exit $?
