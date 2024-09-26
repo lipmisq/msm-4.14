@@ -20,7 +20,7 @@ jobs:
         run: |
           export KBUILD_BUILD_USER=nobody
           export KBUILD_BUILD_HOST=android-build
-          source build.sh
+          source Build.sh
           echo "ZIPNAME=${ZIPNAME}" >> $GITHUB_ENV
 
       - name: Setup build date
