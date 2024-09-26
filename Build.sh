@@ -27,7 +27,6 @@ if ! [ -d $TC_DIR ]; then
   echo "Clang not found! Cloning to ${TC_DIR}..."
   wget "$(curl -s https://raw.githubusercontent.com/XSans0/WeebX-Clang/main/main/link.txt)" -O "weebx-clang.tar.gz"
   mkdir $HOME/toolchain && mkdir $TC_DIR && tar -xvf weebx-clang.tar.gz -C $TC_DIR && rm -rf weebx-clang.tar.gz
-  exit 1
 
 fi
 
@@ -35,7 +34,6 @@ if ! [ -d "${GCC_64_DIR}" ]; then
   echo "gcc not found! Cloning to ${GCC_64_DIR}..."
   if ! git clone --depth=1 -b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git ${GCC_64_DIR}; then
     echo "Cloning failed! Aborting..."
-    exit 1
   fi
 fi
 
@@ -43,7 +41,6 @@ if ! [ -d "${GCC_32_DIR}" ]; then
   echo "gcc_32 not found! Cloning to ${GCC_32_DIR}..."
   if ! git clone --depth=1 -b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9.git ${GCC_32_DIR}; then
     echo "Cloning failed! Aborting..."
-    exit 1
   fi
 fi
 
@@ -57,14 +54,8 @@ if [ "${KSU}" = "true" ]; then
   fi
 fi
 
-if [ "${KSU}" = "true" ]; then
-  ZIPNAME="MiHomo-KSU-$(date +"%Y%m%d").zip"
-  sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"-MiHomo-KSU\"|g" arch/arm64/configs/$DEFCONFIG
-else
-  ZIPNAME="MiHomo-STD-$(date +"%Y%m%d").zip"
-  sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"-MiHomo\"|g" arch/arm64/configs/$DEFCONFIG
-  sed -i "s|CONFIG_KSU=.*|# CONFIG_KSU is not set |g" arch/arm64/configs/$DEFCONFIG
-fi
+
+ZIPNAME="MiHomo-STD-$(date +"%Y%m%d").zip"
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
   make O=out ARCH=arm64 $DEFCONFIG savedefconfig
