@@ -27,32 +27,12 @@ if ! [ -d $TC_DIR ]; then
   echo "Clang not found! Cloning to ${TC_DIR}..."
   wget "$(curl -s https://raw.githubusercontent.com/XSans0/WeebX-Clang/main/main/link.txt)" -O "weebx-clang.tar.gz"
   mkdir $HOME/toolchain && mkdir $TC_DIR && tar -xvf weebx-clang.tar.gz -C $TC_DIR && rm -rf weebx-clang.tar.gz
-
 fi
 
-if ! [ -d "${GCC_64_DIR}" ]; then
-  echo "gcc not found! Cloning to ${GCC_64_DIR}..."
-  if ! git clone --depth=1 -b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git ${GCC_64_DIR}; then
-    echo "Cloning failed! Aborting..."
-  fi
-fi
-
-if ! [ -d "${GCC_32_DIR}" ]; then
-  echo "gcc_32 not found! Cloning to ${GCC_32_DIR}..."
-  if ! git clone --depth=1 -b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9.git ${GCC_32_DIR}; then
-    echo "Cloning failed! Aborting..."
-  fi
-fi
+git clone --depth=1 -b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9.git ${GCC_64_DIR}
+git clone --depth=1 -b lineage-19.1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9.git ${GCC_32_DIR}
 
 # Setup and apply patch KernelSU in root dir
-if [ "${KSU}" = "true" ]; then
-  if ! [ -d "$KERNEL_DIR"/KernelSU ]; then
-    curl -LSs "https://raw.githubusercontent.com/kutemeikito/KernelSU/main/kernel/setup.sh" | bash -s main
-  else
-    echo -e "Setup KernelSU failed, stopped build now..."
-    exit 1
-  fi
-fi
 
 
 ZIPNAME="MiHomo-STD-$(date +"%Y%m%d").zip"
